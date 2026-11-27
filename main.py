@@ -10,6 +10,8 @@ of reading every entry to the end and weighing strangers fairly.
 import os
 from pathlib import Path
 
+OUTPUT_FILENAME = "entry.txt"
+
 TEXT = """For the hours no one sees, thank you.
 
 You read to the end.
@@ -36,9 +38,12 @@ You did."""
 
 
 def main() -> None:
+    # Gate: entry.txt must be UTF-8, 1 to 1,000 characters, not only whitespace.
+    if not 1 <= len(TEXT) <= 1000 or not TEXT.strip():
+        raise ValueError(f"entry text is {len(TEXT)} characters; expected 1-1000")
     output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
     output_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / "entry.txt").write_text(TEXT, encoding="utf-8")
+    (output_dir / OUTPUT_FILENAME).write_text(TEXT, encoding="utf-8")
 
 
 if __name__ == "__main__":
